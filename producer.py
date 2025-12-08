@@ -3,10 +3,10 @@ from confluent_kafka import Producer
 from supabase import create_client
 import json, os, time
 
-# Supabase
+# Supabase – Use publishable key for local/client-side
 supabase = create_client(
     os.getenv("SUPABASE_URL"),
-    os.getenv("SUPABASE_SERVICE_KEY")   # use service_role key locally too
+    os.getenv("SUPABASE_PUBLISHABLE_KEY")  # New: publishable key (replaces anon)
 )
 
 # Kafka
