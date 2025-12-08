@@ -1,12 +1,19 @@
-from kafka import KafkaConsumer
-import json
+# consumer.py
+from confluent_kafka import Consumer
 
-consumer = KafkaConsumer('my-test-topic',
-                         bootstrap_servers='localhost:9092',
-                         auto_offset_reset='earliest',  # Start from beginning
-                         enable_auto_commit=True,
-                         group_id='my-group',
-                         value_deserializer=lambda m: json.loads(m.decode('utf-8')))
+conf = {
+    'bootstrap.servers': 'kafka-practice.onrender.com:9092',
+    'group.id': 'my-group',
+    'auto.offset.reset': 'earliest'
+}
 
-for message in consumer:
-    print(f'Received: {message.value}')
+consumer = Consumer(conf)
+consumer.subscribe(['demo-topic'])
+
+while True:
+    msg = consumer.poll(1.0)
+    if msg is None: continue
+    if msg.error():
+        print("Error:", msg.error())
+        continue
+    print("Received:", msg.value().decode())
