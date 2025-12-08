@@ -8,10 +8,8 @@ WORKDIR /opt/kafka-scripts
 COPY requirements.txt start.sh health.py ./
 
 # Install Python + deps
-RUN apt-get update && \
-    apt-get install -y python3-pip && \
-    pip3 install --no-cache-dir -r requirements.txt && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache python3 py3-pip && \
+    pip3 install --no-cache-dir -r requirements.txt
 
 # Fix permissions so the non-root user can execute start.sh
 RUN chmod +x start.sh && \
