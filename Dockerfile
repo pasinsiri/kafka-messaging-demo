@@ -8,7 +8,7 @@ RUN chmod +x start.sh
 RUN apt update && apt install -y python3-pip && \
     pip3 install --no-cache-dir -r requirements.txt
 
-EXPOSE 9092   # Kafka
-EXPOSE 8080   # Health check
+EXPOSE 9092
+EXPOSE 8080
 
 CMD ["./start.sh"]
