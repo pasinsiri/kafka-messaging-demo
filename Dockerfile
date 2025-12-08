@@ -7,11 +7,11 @@ USER root
 WORKDIR /opt/kafka-scripts
 COPY requirements.txt start.sh health.py ./
 
-# Install Python + deps (UBI uses microdnf, not apt)
-RUN microdnf update -y && \
-    microdnf install -y python3 python3-pip && \
+# Install Python + deps
+RUN apt-get update && \
+    apt-get install -y python3-pip && \
     pip3 install --no-cache-dir -r requirements.txt && \
-    microdnf clean all
+    rm -rf /var/lib/apt/lists/*
 
 # Fix permissions so the non-root user can execute start.sh
 RUN chmod +x start.sh && \
