@@ -9,7 +9,7 @@ ENV KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
 ENV KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
 ENV KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
 ENV KAFKA_PROCESS_ROLES=controller,broker
-ENV KAFKA_LOG_DIRS=/tmp/kafka-logs  # Ephemeral—data lost on restart
+ENV KAFKA_LOG_DIRS=/tmp/kafka-logs
 
 # Copy our files
 COPY requirements.txt start.sh health.py ./
