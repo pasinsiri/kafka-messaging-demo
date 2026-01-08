@@ -11,15 +11,18 @@ COPY requirements.txt start.sh health.py ./
 RUN apk add --no-cache \
     python3 \
     py3-pip \
+    librdkafka && \
+    apk add --no-cache --virtual .build-deps \
     gcc \
     musl-dev \
     python3-dev \
     libffi-dev \
     openssl-dev \
+    librdkafka-dev \
     cargo \
     rust && \
     pip3 install --no-cache-dir --break-system-packages -r requirements.txt && \
-    apk del gcc musl-dev python3-dev libffi-dev openssl-dev cargo rust
+    apk del .build-deps
 
 # Fix permissions so the non-root user can execute start.sh
 RUN chmod +x start.sh && \
