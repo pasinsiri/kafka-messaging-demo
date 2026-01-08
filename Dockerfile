@@ -7,22 +7,39 @@ USER root
 WORKDIR /opt/kafka-scripts
 COPY requirements.txt start.sh health.py ./
 
-# Install Python + build dependencies for compiled packages
-RUN apk add --no-cache \
-    python3 \
-    py3-pip \
-    librdkafka && \
-    apk add --no-cache --virtual .build-deps \
+# Install build dependencies
+RUN apk add --no-cache --virtual .build-deps \
     gcc \
+    g++ \
+    make \
     musl-dev \
     python3-dev \
     libffi-dev \
     openssl-dev \
-    librdkafka-dev \
+    zlib-dev \
+    curl \
+    bash \
     cargo \
-    rust && \
-    pip3 install --no-cache-dir --break-system-packages -r requirements.txt && \
-    apk del .build-deps
+    rust
+
+# Install librdkafka from source (need v2.12.1+)
+RUN curl -LO https://github.com/confluentinc/librdkafka/archive/refs/tags/v2.12.1.tar.gz && \
+    tar -xzf v2.12.1.tar.gz && \
+    cd librdkafka-2.12.1 && \
+    ./configure --prefix=/usr && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf librdkafka-2.12.1 v2.12.1.tar.gz
+
+# Install Python and pip
+RUN apk add --no-cache python3 py3-pip
+
+# Install Python packages
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+
+# Clean up build dependencies but keep runtime libs
+RUN apk del .build-deps
 
 # Fix permissions so the non-root user can execute start.sh
 RUN chmod +x start.sh && \
