@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: kafka-messaging-demo
+    runtime: docker
+    plan: free
+    repo: https://github.com/YOUR_USERNAME/kafka-messaging-demo
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SUPABASE_URL
+        value: https://upnpzdvmdfxhzbxicphp.supabase.co
+      - key: SUPABASE_PUBLISHABLE_KEY
+        value: sb_publishable_o95SrMgKsYXjeftELSMojA_krLkXX3i
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+    healthCheckPath: /
