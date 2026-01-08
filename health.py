@@ -3,6 +3,7 @@ import os
 
 app = Flask(__name__)
 
+@app.route("/")
 @app.route("/health")
 def health():
     return "Kafka is alive", 200
