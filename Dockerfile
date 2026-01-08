@@ -7,9 +7,19 @@ USER root
 WORKDIR /opt/kafka-scripts
 COPY requirements.txt start.sh health.py ./
 
-# Install Python + deps
-RUN apk add --no-cache python3 py3-pip && \
-    pip3 install --no-cache-dir -r requirements.txt
+# Install Python + build dependencies for compiled packages
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    gcc \
+    musl-dev \
+    python3-dev \
+    libffi-dev \
+    openssl-dev \
+    cargo \
+    rust && \
+    pip3 install --no-cache-dir --break-system-packages -r requirements.txt && \
+    apk del gcc musl-dev python3-dev libffi-dev openssl-dev cargo rust
 
 # Fix permissions so the non-root user can execute start.sh
 RUN chmod +x start.sh && \
