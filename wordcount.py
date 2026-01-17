@@ -1,9 +1,13 @@
 # wordcount.py  ← This is your Kafka Streams replacement
 from confluent_kafka import Consumer, Producer
+from dotenv import load_dotenv
 import json, re, time
 from collections import defaultdict
 from supabase import create_client
 import os
+
+# Load environment variables
+load_dotenv()
 
 # Supabase — use secret key for server-side writes
 supabase = create_client(
@@ -12,13 +16,13 @@ supabase = create_client(
 )
 
 consumer = Consumer({
-    'bootstrap.servers': 'kafka-free.onrender.com:9092',
+    'bootstrap.servers': os.getenv("KAFKA_BOOTSTRAP_SERVERS"),
     'group.id': 'wordcount-group-v2',
     'auto.offset.reset': 'earliest',
     'enable.auto.commit': False   # manual commit for reliability
 })
 
-producer = Producer({'bootstrap.servers': 'kafka-free.onrender.com:9092'})
+producer = Producer({'bootstrap.servers': os.getenv("KAFKA_BOOTSTRAP_SERVERS")})
 
 consumer.subscribe(['messages'])
 
