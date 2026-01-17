@@ -1,7 +1,11 @@
 # producer.py
 from confluent_kafka import Producer
 from supabase import create_client
+from dotenv import load_dotenv
 import json, os, time
+
+# Load environment variables
+load_dotenv()
 
 # Supabase — use publishable key locally (safe)
 supabase = create_client(
@@ -9,7 +13,7 @@ supabase = create_client(
     os.getenv("SUPABASE_PUBLISHABLE_KEY")   # sb_publishable_...
 )
 
-producer = Producer({'bootstrap.servers': 'kafka-free.onrender.com:9092'})
+producer = Producer({'bootstrap.servers': os.getenv("KAFKA_BOOTSTRAP_SERVERS")})
 
 def delivery_report(err, msg):
     if err:
