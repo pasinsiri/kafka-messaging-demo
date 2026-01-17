@@ -1,14 +1,19 @@
 # consumer.py
 from confluent_kafka import Consumer
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 conf = {
-    'bootstrap.servers': 'kafka-practice.onrender.com:9092',
+    'bootstrap.servers': os.getenv("KAFKA_BOOTSTRAP_SERVERS"),
     'group.id': 'my-group',
     'auto.offset.reset': 'earliest'
 }
 
 consumer = Consumer(conf)
-consumer.subscribe(['demo-topic'])
+consumer.subscribe(['messages'])
 
 while True:
     msg = consumer.poll(1.0)
